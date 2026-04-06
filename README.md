@@ -4,14 +4,14 @@
 
 ```
 fortigate-vlan-tool/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml        ← GitHub Actions 配置
-├── src/
-│   ├── App.tsx               ← 主程序（Artifact 代碼貼這裡）
-│   ├── main.tsx
-│   └── index.css
+├── .github/workflows/docker.yml  ← Actions 自動 build
+├── src/App.tsx                   ← 工具主程序
+├── src/main.tsx
+├── src/index.css
 ├── index.html
+├── Dockerfile                    ← 兩階段 build
+├── nginx.conf                    ← Nginx 配置
+├── .dockerignore
 ├── package.json
-├── tsconfig.json
-└── vite.config.ts
+├── vite.config.ts
+└── tsconfig.json
