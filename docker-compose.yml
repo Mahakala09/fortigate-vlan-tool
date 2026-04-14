@@ -1,0 +1,11 @@
+
+services:
+  fortigate-vlan-tool:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fortigate-vlan-tool:latest
+    container_name: fortigate-vlan-tool
+    ports:
+      - "8088:80"
+    restart: unless-stopped
