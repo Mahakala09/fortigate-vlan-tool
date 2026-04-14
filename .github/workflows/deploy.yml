@@ -23,7 +23,7 @@ jobs:
           elif docker compose version &> /dev/null; then
             echo "COMPOSE_CMD=docker compose" >> $GITHUB_ENV
           else
-            echo "❌ docker-compose not found, installing..."
+            echo "❌ docker-compose not found, installing...."
             sudo apt-get update -y
             sudo apt-get install -y docker-compose-plugin
             echo "COMPOSE_CMD=docker compose" >> $GITHUB_ENV
