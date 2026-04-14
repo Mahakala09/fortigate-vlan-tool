@@ -5,7 +5,7 @@ WORKDIR /app
 
 # 先複製 package 文件，利用 Docker cache
 COPY package*.json ./
-RUN npm install
+RUN npm install --registry https://registry.npmmirror.com
 
 # 複製源碼並打包
 COPY . .
