@@ -5,7 +5,7 @@ WORKDIR /app
 
 # 先複製 package 文件，利用 Docker cache
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # 複製源碼並打包
 COPY . .
