@@ -7,23 +7,39 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted   # ← 跑在你自己的伺服器上
+    runs-on: self-hosted
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # 修正 Node.js 20 警告
 
-      - name: Build & Deploy
+      - name: Check docker-compose
         run: |
-          docker-compose down --remove-orphans || true
-          docker-compose up -d --build
+          # 同時支援 docker-compose 和 docker compose 兩種版本
+          if command -v docker-compose &> /dev/null; then
+            echo "COMPOSE_CMD=docker-compose" >> $GITHUB_ENV
+          elif docker compose version &> /dev/null; then
+            echo "COMPOSE_CMD=docker compose" >> $GITHUB_ENV
+          else
+            echo "❌ docker-compose not found, installing..."
+            sudo apt-get update -y
+            sudo apt-get install -y docker-compose-plugin
+            echo "COMPOSE_CMD=docker compose" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy
+        run: |
+          cd $GITHUB_WORKSPACE
+          ${{ env.COMPOSE_CMD }} down --remove-orphans || true
+          ${{ env.COMPOSE_CMD }} up -d --build
+          echo "✅ 部署完成"
 
       - name: Clean up old images
-        run: |
-          docker image prune -f
+        run: docker image prune -f
 
       - name: Health check
         run: |
-          sleep 3
-          curl -f http://localhost:8080 || exit 1
-          echo "✅ 部署成功，服務正常運行"
+          sleep 5
+          curl -sf http://localhost:8080 > /dev/null && echo "✅ 服務正常" || echo "⚠️ 健康檢查失敗，請手動確認"
