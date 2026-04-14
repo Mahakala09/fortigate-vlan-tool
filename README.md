@@ -38,6 +38,7 @@ git push origin main
 # GitHub Actions 自動 build → push 到 Docker Hub
 
 在任何機器上運行：
+docker build -t fortigate-vlan-tool:latest .
 bash# 直接拉取運行，端口 8080
 docker run -d -p 8080:80 你的用戶名/fortigate-vlan-tool:latest
 
